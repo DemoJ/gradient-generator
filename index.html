@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渐变背景生成器</title>
+    <link rel="icon" href="https://files.diyun.site/blog/2024/07/7fae6d19f5561324c078bebcfe19cbff.webp">
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 添加图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>渐变背景生成器</h1>
+            
+            <!-- 推荐渐变 -->
+            <div class="control-group">
+                <label>推荐渐变：</label>
+                <div class="preset-gradients">
+                    <button class="preset-btn" data-colors='["#FF3CAC", "#784BA0"]' title="霓虹紫">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF3CAC, #784BA0)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#FF9A9E", "#FAD0C4"]' title="珊瑚粉">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF9A9E, #FAD0C4)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#4158D0", "#C850C0"]' title="极光紫">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #4158D0, #C850C0)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#0093E9", "#80D0C7"]' title="海洋蓝">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #0093E9, #80D0C7)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#FF3CAC", "#2B86C5"]' title="糖果渐变">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF3CAC, #2B86C5)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#FF6B6B", "#4ECDC4"]' title="热带风情">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#764BA2", "#667EEA"]' title="深邃紫">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #764BA2, #667EEA)"></div>
+                    </button>
+                    <button class="preset-btn" data-colors='["#F83600", "#FE8C00"]' title="热情橙">
+                        <div class="preset-preview" style="background: linear-gradient(45deg, #F83600, #FE8C00)"></div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 自定义渐变 -->
+            <div class="control-group">
+                <label>自定义渐变：</label>
+                <div class="color-inputs">
+                    <input type="color" id="color1" value="#4158D0">
+                    <input type="color" id="color2" value="#C850C0">
+                </div>
+            </div>
+
+            <!-- 渐变角度 -->
+            <div class="control-group">
+                <label>渐变角度：</label>
+                <input type="range" id="angle" min="0" max="360" value="45">
+                <span id="angleValue">45°</span>
+            </div>
+
+            <!-- 图片尺寸 -->
+            <div class="control-group">
+                <label>图片尺寸：</label>
+                <div class="size-inputs">
+                    <input type="number" id="width" value="1920" placeholder="宽度">
+                    <span>×</span>
+                    <input type="number" id="height" value="1080" placeholder="高度">
+                </div>
+            </div>
+
+            <!-- 图片格式 -->
+            <div class="control-group">
+                <label>图片格式：</label>
+                <div class="format-options">
+                    <label class="format-option">
+                        <input type="radio" name="format" value="png" checked>
+                        <span>PNG</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="format" value="jpeg">
+                        <span>JPEG</span>
+                    </label>
+                    <label class="format-option">
+                        <input type="radio" name="format" value="webp">
+                        <span>WebP</span>
+                    </label>
+                </div>
+            </div>
+
+            <button id="download">下载背景图片</button>
+        </div>
+
+        <div class="preview-container">
+            <div id="preview" class="preview"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
