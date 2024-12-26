@@ -10,6 +10,24 @@
     <!-- 添加图标库 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="styles.css">
+    <!-- 百度统计 -->
+    <script>
+        // 加载配置文件并初始化百度统计
+        fetch('config.json')
+            .then(response => response.json())
+            .then(config => {
+                if (config.baiduAnalytics) {
+                    var _hmt = _hmt || [];
+                    (function() {
+                        var hm = document.createElement("script");
+                        hm.src = "https://hm.baidu.com/hm.js?" + config.baiduAnalytics;
+                        var s = document.getElementsByTagName("script")[0]; 
+                        s.parentNode.insertBefore(hm, s);
+                    })();
+                }
+            })
+            .catch(error => console.error('加载配置文件失败:', error));
+    </script>
 </head>
 <body>
     <div class="container">
