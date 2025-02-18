@@ -65,7 +65,7 @@ html[lang="en"] .controls h1 {
 }
 
 .control-group {
-    margin: 18px 0; /* 减小控制组之间的间距 */
+    margin-bottom: 16px;
 }
 
 .control-group label {
@@ -134,13 +134,13 @@ button {
     background: #3498db;
     color: white;
     border: none;
-    padding: 10px 20px; /* 减小按钮内边距 */
-    border-radius: 10px;
+    padding: 12px 24px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 20px; /* 减小上边距 */
+    font-size: 16px;
+    font-weight: bold;
     width: 100%;
-    font-size: 15px; /* 稍微减小字体大小 */
-    transition: background 0.3s;
+    margin-top: 15px;
 }
 
 button:hover {
