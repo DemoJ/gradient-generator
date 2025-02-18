@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 添加语言切换按钮的激活状态管理
+    const languageButtons = document.querySelectorAll('.language-btn');
+    languageButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 移除所有按钮的 active 类
+            languageButtons.forEach(b => b.classList.remove('active'));
+            // 为当前点击的按钮添加 active 类
+            this.classList.add('active');
+        });
+    });
+
     const preview = document.getElementById('preview');
     const color1Input = document.getElementById('color1');
     const color2Input = document.getElementById('color2');
@@ -136,4 +147,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化时调用一次
     updatePreviewRatio();
-}); 
+});

@@ -36,11 +36,16 @@ body {
 
 .controls h1 {
     color: #2c3e50;
-    margin-bottom: 25px; /* 减小下边距 */
-    font-size: 28px !important; /* 减小字体大小 */
+    margin-bottom: 25px;
+    font-size: 28px !important;
     border-bottom: 2px solid #eee;
-    padding-bottom: 12px; /* 减小下内边距 */
+    padding-bottom: 12px;
     font-weight: 600;
+}
+
+/* 英文模式下的标题样式 */
+html[lang="en"] .controls h1 {
+    font-size: 20px !important;
 }
 
 .control-group {
@@ -316,6 +321,108 @@ button#download:active {
 .format-option input[type="radio"]:checked ~ .format-option {
     border-color: #4299e1;
     background: #ebf8ff;
+}
+
+/* 优化滚动条样式 */
+.controls::-webkit-scrollbar {
+    width: 8px;
+}
+
+.controls::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.controls::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.controls::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+} 
+
+/* 修改预览区域相关样式 */
+.preview-container {
+    width: 100%;
+    height: calc(100vh - 80px);
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    padding: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+    position: sticky;
+    top: 40px;
+}
+
+/* 调整网格背景 */
+.preview-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(45deg, #f5f5f5 25%, transparent 25%),
+        linear-gradient(-45deg, #f5f5f5 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #f5f5f5 75%),
+        linear-gradient(-45deg, transparent 75%, #f5f5f5 75%);
+    background-size: 24px 24px; /* 增大网格尺寸 */
+    background-position: 0 0, 0 12px, 12px -12px, -12px 0px;
+    border-radius: 24px;
+    opacity: 0.5;
+}
+
+.preview {
+    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.preview-content {
+    width: 100%;
+    height: 100%;
+}
+/* 语言切换按钮样式 */
+.language-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.language-btn {
+    padding: 8px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4a5568;
+    transition: all 0.3s ease;
+    width: auto;
+    margin-top: 0;
+}
+
+.language-btn:hover {
+    border-color: #4299e1;
+    background: #f7fafc;
+    transform: translateY(-1px);
+}
+
+.language-btn.active {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border-color: #3182ce;
+    box-shadow: 0 2px 6px rgba(66, 153, 225, 0.2);
 }
 
 /* 优化滚动条样式 */

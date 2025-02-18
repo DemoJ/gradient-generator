@@ -17,6 +17,37 @@
     <!-- 添加图标库 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
     <link rel="stylesheet" href="styles.css">
+    <!-- 语言切换按钮样式 -->
+    <style>
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .language-btn {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .language-btn:hover {
+            background: #f0f0f0;
+        }
+        .language-btn.active {
+            background: #4158D0;
+            color: white;
+            border-color: #4158D0;
+        }
+    </style>
     <!-- 百度统计 -->
     <script>
         // 加载配置文件并初始化百度统计
@@ -39,11 +70,20 @@
 <body>
     <div class="container">
         <div class="controls">
-            <h1>渐变背景生成器</h1>
+            <h1 data-lang="pageTitle">渐变背景生成器</h1>
+            
+            <!-- 语言切换按钮 -->
+            <div class="control-group">
+                <label data-lang="languageSelector">语言：</label>
+                <div class="language-buttons">
+                    <button class="language-btn active" onclick="setLanguage('zh-CN')">中文</button>
+                    <button class="language-btn" onclick="setLanguage('en')">English</button>
+                </div>
+            </div>
             
             <!-- 推荐渐变 -->
             <div class="control-group">
-                <label>推荐渐变：</label>
+                <label data-lang="presetGradients">推荐渐变：</label>
                 <div class="preset-gradients">
                     <button class="preset-btn" data-colors='["#FF3CAC", "#784BA0"]' title="霓虹紫">
                         <div class="preset-preview" style="background: linear-gradient(45deg, #FF3CAC, #784BA0)"></div>
@@ -74,7 +114,7 @@
 
             <!-- 自定义渐变 -->
             <div class="control-group">
-                <label>自定义渐变：</label>
+                <label data-lang="customGradient">自定义渐变：</label>
                 <div class="color-inputs">
                     <input type="color" id="color1" value="#4158D0">
                     <input type="color" id="color2" value="#C850C0">
@@ -83,14 +123,14 @@
 
             <!-- 渐变角度 -->
             <div class="control-group">
-                <label>渐变角度：</label>
+                <label data-lang="gradientAngle">渐变角度：</label>
                 <input type="range" id="angle" min="0" max="360" value="45">
                 <span id="angleValue">45°</span>
             </div>
 
             <!-- 图片尺寸 -->
             <div class="control-group">
-                <label>图片尺寸：</label>
+                <label data-lang="imageSize">图片尺寸：</label>
                 <div class="size-inputs">
                     <input type="number" id="width" value="1920" placeholder="宽度">
                     <span>×</span>
@@ -100,7 +140,7 @@
 
             <!-- 图片格式 -->
             <div class="control-group">
-                <label>图片格式：</label>
+                <label data-lang="imageFormat">图片格式：</label>
                 <div class="format-options">
                     <label class="format-option">
                         <input type="radio" name="format" value="png" checked>
@@ -117,13 +157,14 @@
                 </div>
             </div>
 
-            <button id="download">下载背景图片</button>
+            <button id="download" data-lang="downloadButton">下载背景图片</button>
         </div>
 
         <div class="preview-container">
             <div id="preview" class="preview"></div>
         </div>
     </div>
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
