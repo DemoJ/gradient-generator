@@ -14,8 +14,8 @@
     <link rel="icon" href="https://files.diyun.site/blog/2024/07/7fae6d19f5561324c078bebcfe19cbff.webp">
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 添加图标库 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <!-- 语言切换按钮样式 -->
     <style>
@@ -68,19 +68,18 @@
     </script>
 </head>
 <body>
+    <header class="header">
+        <h1 data-lang="pageTitle">渐变背景生成器</h1>
+        <a href="https://github.com/DemoJ/gradient-generator" target="_blank" class="github-link" title="View on GitHub">
+            <i class="fab fa-github"></i>
+        </a>
+        <div class="language-buttons">
+            <button class="language-btn active" onclick="setLanguage('zh-CN')">中文</button>
+            <button class="language-btn" onclick="setLanguage('en')">English</button>
+        </div>
+    </header>
     <div class="container">
         <div class="controls">
-            <h1 data-lang="pageTitle">渐变背景生成器</h1>
-            
-            <!-- 语言切换按钮 -->
-            <div class="control-group">
-                <label data-lang="languageSelector">语言：</label>
-                <div class="language-buttons">
-                    <button class="language-btn active" onclick="setLanguage('zh-CN')">中文</button>
-                    <button class="language-btn" onclick="setLanguage('en')">English</button>
-                </div>
-            </div>
-            
             <!-- 推荐渐变 -->
             <div class="control-group">
                 <label data-lang="presetGradients">推荐渐变：</label>
