@@ -5,7 +5,15 @@ const translations = {
         description: '免费在线渐变背景生成器，轻松创建和下载漂亮的渐变背景图片。支持自定义颜色、角度和尺寸，可导出多种格式。',
         keywords: '渐变背景,背景生成器,在线工具,CSS渐变,设计工具,图片生成器',
         pageTitle: '渐变背景生成器',
-        presetGradients: '推荐渐变：',
+        presetGradients: '推荐渐变',
+        customColors: '自定义颜色',
+        gradientSettings: '渐变设置',
+        imageSettings: '图片设置',
+        format: '格式',
+        preview: '实时预览',
+        copyCss: '复制CSS',
+        randomGradient: '随机渐变',
+        fullscreenPreview: '全屏预览',
         neonPurple: '霓虹紫',
         coralPink: '珊瑚粉',
         auroraPurple: '极光紫',
@@ -28,7 +36,15 @@ const translations = {
         description: 'Free online gradient background generator. Create and download beautiful gradient background images. Customize colors, angles, and sizes, export in multiple formats.',
         keywords: 'gradient background,background generator,online tool,CSS gradient,design tool,image generator',
         pageTitle: 'Gradient Background Generator',
-        presetGradients: 'Preset Gradients:',
+        presetGradients: 'Preset Gradients',
+        customColors: 'Custom Colors',
+        gradientSettings: 'Gradient Settings',
+        imageSettings: 'Image Settings',
+        format: 'Format',
+        preview: 'Preview',
+        copyCss: 'Copy CSS',
+        randomGradient: 'Random Gradient',
+        fullscreenPreview: 'Fullscreen Preview',
         neonPurple: 'Neon Purple',
         coralPink: 'Coral Pink',
         auroraPurple: 'Aurora Purple',
@@ -53,6 +69,10 @@ class LanguageManager {
     constructor() {
         this.translations = translations;
         this.currentLanguage = this.getSavedLanguage() || this.getSystemLanguage();
+        
+        // 立即设置html标签的lang属性
+        document.documentElement.lang = this.currentLanguage;
+        
         // 立即更新页面内容和按钮状态
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
@@ -63,6 +83,12 @@ class LanguageManager {
             this.updateContent();
             this.updateButtons();
         }
+        
+        // 确保在页面完全加载后再次更新
+        window.addEventListener('load', () => {
+            this.updateContent();
+            this.updateButtons();
+        });
     }
 
     // 获取保存的语言设置

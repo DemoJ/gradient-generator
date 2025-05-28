@@ -12,42 +12,21 @@
     <meta property="og:type" content="website">
     <title>渐变背景生成器 - 在线创建精美渐变背景</title>
     <link rel="icon" href="https://files.diyun.site/blog/2024/07/7fae6d19f5561324c078bebcfe19cbff.webp">
-    <!-- TailwindCSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 新的CSS样式 -->
     <link rel="stylesheet" href="styles.css">
-    <!-- 语言切换按钮样式 -->
-    <style>
-        .language-selector {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .language-btn {
-            padding: 4px 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .language-btn:hover {
-            background: #f0f0f0;
-        }
-        .language-btn.active {
-            background: #4158D0;
-            color: white;
-            border-color: #4158D0;
-        }
-    </style>
+    
+    <!-- 多语言脚本 - 提前加载 -->
+    <script src="i18n.js"></script>
+    
     <!-- 百度统计 -->
     <script>
         // 加载配置文件并初始化百度统计
@@ -68,102 +47,188 @@
     </script>
 </head>
 <body>
-    <header class="header">
-        <h1 data-lang="pageTitle">渐变背景生成器</h1>
-        <a href="https://github.com/DemoJ/gradient-generator" target="_blank" class="github-link" title="View on GitHub">
-            <i class="fab fa-github"></i>
-        </a>
-        <div class="language-buttons">
-            <button class="language-btn active" onclick="setLanguage('zh-CN')">中文</button>
-            <button class="language-btn" onclick="setLanguage('en')">English</button>
-        </div>
-    </header>
-    <div class="container">
-        <div class="controls">
-            <!-- 推荐渐变 -->
-            <div class="control-group">
-                <label data-lang="presetGradients">推荐渐变：</label>
-                <div class="preset-gradients">
-                    <button class="preset-btn" data-colors='["#FF3CAC", "#784BA0"]' title="霓虹紫">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF3CAC, #784BA0)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#FF9A9E", "#FAD0C4"]' title="珊瑚粉">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF9A9E, #FAD0C4)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#4158D0", "#C850C0"]' title="极光紫">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #4158D0, #C850C0)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#0093E9", "#80D0C7"]' title="海洋蓝">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #0093E9, #80D0C7)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#FF3CAC", "#2B86C5"]' title="糖果渐变">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF3CAC, #2B86C5)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#FF6B6B", "#4ECDC4"]' title="热带风情">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #FF6B6B, #4ECDC4)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#764BA2", "#667EEA"]' title="深邃紫">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #764BA2, #667EEA)"></div>
-                    </button>
-                    <button class="preset-btn" data-colors='["#F83600", "#FE8C00"]' title="热情橙">
-                        <div class="preset-preview" style="background: linear-gradient(45deg, #F83600, #FE8C00)"></div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 自定义渐变 -->
-            <div class="control-group">
-                <label data-lang="customGradient">自定义渐变：</label>
-                <div class="color-inputs">
-                    <input type="color" id="color1" value="#4158D0">
-                    <input type="color" id="color2" value="#C850C0">
-                </div>
-            </div>
-
-            <!-- 渐变角度 -->
-            <div class="control-group">
-                <label data-lang="gradientAngle">渐变角度：</label>
-                <input type="range" id="angle" min="0" max="360" value="45">
-                <span id="angleValue">45°</span>
-            </div>
-
-            <!-- 图片尺寸 -->
-            <div class="control-group">
-                <label data-lang="imageSize">图片尺寸：</label>
-                <div class="size-inputs">
-                    <input type="number" id="width" value="1920" placeholder="宽度">
-                    <span>×</span>
-                    <input type="number" id="height" value="1080" placeholder="高度">
-                </div>
-            </div>
-
-            <!-- 图片格式 -->
-            <div class="control-group">
-                <label data-lang="imageFormat">图片格式：</label>
-                <div class="format-options">
-                    <label class="format-option">
-                        <input type="radio" name="format" value="png" checked>
-                        <span>PNG</span>
-                    </label>
-                    <label class="format-option">
-                        <input type="radio" name="format" value="jpeg">
-                        <span>JPEG</span>
-                    </label>
-                    <label class="format-option">
-                        <input type="radio" name="format" value="webp">
-                        <span>WebP</span>
-                    </label>
-                </div>
-            </div>
-
-            <button id="download" data-lang="downloadButton">下载背景图片</button>
-        </div>
-
-        <div class="preview-container">
-            <div id="preview" class="preview"></div>
+    <!-- 背景动画层 -->
+    <div class="background-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
         </div>
     </div>
-    <script src="i18n.js"></script>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-palette"></i>
+            <span data-lang="pageTitle">渐变生成器</span>
+        </div>
+        <div class="nav-actions">
+            <div class="language-switcher">
+                <button class="language-btn active" onclick="setLanguage('zh-CN')">
+                    <i class="fas fa-globe"></i>
+                    中文
+                </button>
+                <button class="language-btn" onclick="setLanguage('en')">
+                    <i class="fas fa-globe"></i>
+                    EN
+                </button>
+            </div>
+            <a href="https://github.com/DemoJ/gradient-generator" target="_blank" class="github-btn">
+                <i class="fab fa-github"></i>
+                <span>GitHub</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 主容器 -->
+    <main class="main-container">
+        <!-- 左侧控制面板 -->
+        <aside class="control-panel">
+            <div class="control-content">
+                <!-- 预设渐变 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-star"></i> <span data-lang="presetGradients">推荐渐变</span></h3>
+                    <div class="preset-grid">
+                        <button class="preset-item" data-colors='["#667eea", "#764ba2"]' title="梦幻紫">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                            <span class="preset-name">梦幻紫</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#f093fb", "#f5576c"]' title="粉色梦境">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                            <span class="preset-name">粉色梦境</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#4facfe", "#00f2fe"]' title="天空蓝">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
+                            <span class="preset-name">天空蓝</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#43e97b", "#38f9d7"]' title="薄荷绿">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></div>
+                            <span class="preset-name">薄荷绿</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#fa709a", "#fee140"]' title="日落黄">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
+                            <span class="preset-name">日落黄</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#a8edea", "#fed6e3"]' title="柔和粉">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"></div>
+                            <span class="preset-name">柔和粉</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#ff9a9e", "#fecfef"]' title="樱花粉">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"></div>
+                            <span class="preset-name">樱花粉</span>
+                        </button>
+                        <button class="preset-item" data-colors='["#a18cd1", "#fbc2eb"]' title="淡紫色">
+                            <div class="preset-bg" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)"></div>
+                            <span class="preset-name">淡紫色</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 自定义颜色 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-palette"></i> <span data-lang="customColors">自定义颜色</span></h3>
+                    <div class="color-picker-group">
+                        <div class="color-picker">
+                            <div class="color-input-wrapper">
+                                <input type="color" id="color1" value="#667eea">
+                                <span class="color-value">#667eea</span>
+                            </div>
+                        </div>
+                        <div class="color-picker">
+                            <div class="color-input-wrapper">
+                                <input type="color" id="color2" value="#764ba2">
+                                <span class="color-value">#764ba2</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 渐变设置 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-cog"></i> <span data-lang="gradientSettings">渐变设置</span></h3>
+                    <div class="setting-item">
+                        <div class="slider-wrapper">
+                            <input type="range" id="angle" min="0" max="360" value="135" class="modern-slider">
+                            <span class="slider-value" id="angleValue">135°</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 图片设置 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-image"></i> <span data-lang="imageSettings">图片设置</span></h3>
+                    <div class="setting-row">
+                        <div class="setting-item">
+                            <input type="number" id="width" value="1920" min="100" max="8000" class="number-input">
+                        </div>
+                        <div class="setting-item">
+                            <input type="number" id="height" value="1080" min="100" max="8000" class="number-input">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 格式选择 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-file"></i> <span data-lang="format">格式</span></h3>
+                    <div class="format-selector">
+                        <label class="format-option">
+                            <input type="radio" name="format" value="png" checked>
+                            <span>PNG</span>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="format" value="jpeg">
+                            <span>JPEG</span>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="format" value="webp">
+                            <span>WebP</span>
+                        </label>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 下载按钮 -->
+            <div class="download-section">
+                <button id="download" class="download-btn">
+                    <i class="fas fa-download"></i>
+                    <span data-lang="downloadButton">下载背景图片</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- 右侧预览区域 -->
+        <section class="preview-section">
+            <div class="preview-header">
+                <h2><i class="fas fa-eye"></i> <span data-lang="preview">实时预览</span></h2>
+                <div class="preview-info">
+                    <span class="css-code" id="cssCode">background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</span>
+                    <button class="copy-btn" onclick="copyCSSCode()">
+                        <i class="fas fa-copy"></i>
+                        <span data-lang="copyCss">复制CSS</span>
+                    </button>
+                </div>
+            </div>
+            <div class="preview-container">
+                <div id="preview" class="preview-canvas"></div>
+                <div class="preview-overlay">
+                    <div class="preview-controls">
+                        <button class="preview-btn" onclick="randomGradient()">
+                            <i class="fas fa-random"></i>
+                            <span data-lang="randomGradient">随机渐变</span>
+                        </button>
+                        <button class="preview-btn" onclick="toggleFullscreen()">
+                            <i class="fas fa-expand"></i>
+                            <span data-lang="fullscreenPreview">全屏预览</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 脚本文件 -->
     <script src="script.js"></script>
 </body>
 </html>
