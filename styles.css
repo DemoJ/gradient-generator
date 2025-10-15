@@ -603,7 +603,7 @@ body {
   background: rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  max-width: 300px;
+  width: auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
