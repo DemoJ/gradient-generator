@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const cssCodeDisplay = document.getElementById('cssCode');
     const presetItems = document.querySelectorAll('.preset-item');
     const languageButtons = document.querySelectorAll('.language-btn');
+    const imageUpload = document.getElementById('imageUpload');
+    const removeImageBtn = document.getElementById('removeImage');
+    const imageScaleControl = document.getElementById('imageScaleControl');
+    const imageScaleInput = document.getElementById('imageScale');
+    const imageScaleValue = document.getElementById('imageScaleValue');
+    let uploadedImage = null;
     
     // 语言切换功能
     languageButtons.forEach(btn => {
@@ -41,12 +47,137 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // 更新颜色值显示
         updateColorValues();
+
+        // 更新预览区域尺寸比例
+        const width = parseInt(document.getElementById('width').value) || 1920;
+        const height = parseInt(document.getElementById('height').value) || 1080;
+        const container = document.querySelector('.preview-container');
+        
+        // 计算容器可用空间（减去padding等）
+        const containerWidth = container.clientWidth - 32; // 减去padding
+        const containerHeight = container.clientHeight - 32;
+        
+        const targetRatio = width / height;
+        const containerRatio = containerWidth / containerHeight;
+        
+        let finalWidth, finalHeight;
+        
+        if (targetRatio > containerRatio) {
+            // 目标更宽，以宽度为基准
+            finalWidth = containerWidth;
+            finalHeight = finalWidth / targetRatio;
+        } else {
+            // 目标更高，以高度为基准
+            finalHeight = containerHeight;
+            finalWidth = finalHeight * targetRatio;
+        }
+        
+        preview.style.width = `${finalWidth}px`;
+        preview.style.height = `${finalHeight}px`;
+        // 移除圆角，因为现在是模拟真实尺寸
+        preview.style.borderRadius = '0';
     }
+
+    // 处理图片上传
+    imageUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = new Image();
+            img.onload = function() {
+                uploadedImage = img;
+                
+                // 移除旧的预览图片
+                const oldImg = preview.querySelector('.preview-image');
+                if (oldImg) oldImg.remove();
+                
+                // 添加新的预览图片
+                const previewImg = document.createElement('img');
+                previewImg.src = event.target.result;
+                previewImg.className = 'preview-image';
+                
+                preview.appendChild(previewImg);
+
+                // 显示移除按钮和缩放控制
+                removeImageBtn.style.display = 'flex';
+                imageScaleControl.style.display = 'block';
+                
+                // 更新上传按钮文本
+                const uploadText = document.querySelector('.upload-text');
+                uploadText.textContent = file.name;
+
+                // 手动触发一次缩放逻辑，确保初始显示正确
+                // 注意：这里创建一个新的Event对象，避免与上面的event变量冲突
+                const inputEvent = new Event('input');
+                imageScaleInput.dispatchEvent(inputEvent);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // 移除图片
+    removeImageBtn.addEventListener('click', function() {
+        uploadedImage = null;
+        imageUpload.value = '';
+        const previewImg = preview.querySelector('.preview-image');
+        if (previewImg) previewImg.remove();
+        this.style.display = 'none';
+        imageScaleControl.style.display = 'none';
+        document.querySelector('.upload-text').textContent = languageManager.translate('chooseFile');
+    });
+
+    // 监听缩放滑块
+    imageScaleInput.addEventListener('input', function() {
+        imageScaleValue.textContent = `${this.value}%`;
+        if (uploadedImage) {
+            // 更新预览图片大小
+            const previewImg = preview.querySelector('.preview-image');
+            if (previewImg) {
+                const scale = this.value;
+                
+                // 计算图片原始宽高比
+                const imgRatio = uploadedImage.width / uploadedImage.height;
+                // 计算容器宽高比
+                const containerRatio = preview.clientWidth / preview.clientHeight;
+                
+                // 根据比例决定基准尺寸
+                if (imgRatio > containerRatio) {
+                    // 图片更宽，以宽度为基准
+                    previewImg.style.width = `${scale}%`;
+                    previewImg.style.height = 'auto';
+                    previewImg.style.maxWidth = 'none';
+                    previewImg.style.maxHeight = 'none';
+                } else {
+                    // 图片更高，以高度为基准
+                    previewImg.style.height = `${scale}%`;
+                    previewImg.style.width = 'auto';
+                    previewImg.style.maxWidth = 'none';
+                    previewImg.style.maxHeight = 'none';
+                }
+                
+                // 确保居中
+                previewImg.style.position = 'absolute';
+                previewImg.style.top = '50%';
+                previewImg.style.left = '50%';
+                previewImg.style.transform = 'translate(-50%, -50%)';
+            }
+        }
+    });
 
     // 事件监听器
     color1Input.addEventListener('input', updatePreview);
     color2Input.addEventListener('input', updatePreview);
     angleInput.addEventListener('input', updatePreview);
+    
+    // 监听宽高输入，实时更新预览比例
+    document.getElementById('width').addEventListener('input', updatePreview);
+    document.getElementById('height').addEventListener('input', updatePreview);
+    
+    // 监听窗口大小变化，重新计算预览尺寸
+    window.addEventListener('resize', updatePreview);
 
     // 预设渐变点击事件
     presetItems.forEach(item => {
@@ -104,6 +235,43 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, width, height);
 
+        // 如果有上传的图片，绘制图片
+        if (uploadedImage) {
+            // 计算图片绘制尺寸（保持比例，居中）
+            const imgRatio = uploadedImage.width / uploadedImage.height;
+            const canvasRatio = width / height;
+            
+            let drawWidth, drawHeight, drawX, drawY;
+            
+            // 获取用户设置的缩放比例 (0.1 - 1.0)
+            const scale = parseInt(imageScaleInput.value) / 100;
+            
+            if (imgRatio > canvasRatio) {
+                drawWidth = width * scale;
+                drawHeight = drawWidth / imgRatio;
+            } else {
+                drawHeight = height * scale;
+                drawWidth = drawHeight * imgRatio;
+            }
+            
+            drawX = (width - drawWidth) / 2;
+            drawY = (height - drawHeight) / 2;
+            
+            // 绘制阴影
+            ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 10;
+            
+            ctx.drawImage(uploadedImage, drawX, drawY, drawWidth, drawHeight);
+            
+            // 重置阴影
+            ctx.shadowColor = "transparent";
+            ctx.shadowBlur = 0;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+        }
+
         // 设置MIME类型和质量
         let mimeType = `image/${format}`;
         let quality = 0.92;
@@ -121,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 下载按钮动画反馈
         downloadBtn.innerHTML = '<i class="fas fa-check"></i><span>已下载</span>';
         setTimeout(() => {
-            downloadBtn.innerHTML = '<i class="fas fa-download"></i><span data-lang="downloadButton">下载背景图片</span>';
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i><span data-lang="downloadButton">下载到本地</span>';
         }, 2000);
     });
 
@@ -137,6 +305,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化
     initializeDefault();
+    // 滚动条交互优化
+    const controlContent = document.querySelector('.control-content');
+    let scrollTimeout;
+
+    controlContent.addEventListener('scroll', () => {
+        controlContent.classList.add('scrolling');
+        
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            controlContent.classList.remove('scrolling');
+        }, 1000); // 停止滚动1秒后隐藏
+    });
 });
 
 // 复制CSS代码功能

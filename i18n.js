@@ -8,6 +8,8 @@ const translations = {
         presetGradients: '推荐渐变',
         customColors: '自定义颜色',
         gradientSettings: '渐变设置',
+        uploadImage: '上传贴图',
+        chooseFile: '选择图片',
         imageSettings: '图片设置',
         format: '格式',
         preview: '实时预览',
@@ -27,8 +29,9 @@ const translations = {
         imageSize: '图片尺寸：',
         width: '宽度',
         height: '高度',
+        imageScale: '缩放比例',
         imageFormat: '图片格式：',
-        downloadButton: '下载背景图片',
+        downloadButton: '下载到本地',
         languageSelector: '语言：'
     },
     'en': {
@@ -39,6 +42,8 @@ const translations = {
         presetGradients: 'Preset Gradients',
         customColors: 'Custom Colors',
         gradientSettings: 'Gradient Settings',
+        uploadImage: 'Upload Image',
+        chooseFile: 'Choose Image',
         imageSettings: 'Image Settings',
         format: 'Format',
         preview: 'Preview',
@@ -58,8 +63,9 @@ const translations = {
         imageSize: 'Image Size:',
         width: 'Width',
         height: 'Height',
+        imageScale: 'Scale',
         imageFormat: 'Image Format:',
-        downloadButton: 'Download Background Image',
+        downloadButton: 'Download Image',
         languageSelector: 'Language:'
     }
 };

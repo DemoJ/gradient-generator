@@ -156,6 +156,29 @@
                     </div>
                 </section>
 
+                <!-- 图片上传 -->
+                <section class="control-section">
+                    <h3><i class="fas fa-upload"></i> <span data-lang="uploadImage">上传贴图</span></h3>
+                    <div class="upload-box">
+                        <input type="file" id="imageUpload" accept="image/*" hidden>
+                        <label for="imageUpload" class="upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="upload-text" data-lang="chooseFile">选择图片</span>
+                        </label>
+                        <button id="removeImage" class="remove-img-btn" style="display: none;" title="移除图片">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <!-- 贴图缩放控制 -->
+                    <div class="setting-item" id="imageScaleControl" style="display: none; margin-top: 1rem;">
+                        <div class="slider-wrapper">
+                            <span class="slider-label" data-lang="imageScale">缩放比例</span>
+                            <input type="range" id="imageScale" min="10" max="100" value="80" class="modern-slider">
+                            <span class="slider-value" id="imageScaleValue">80%</span>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- 图片设置 -->
                 <section class="control-section">
                     <h3><i class="fas fa-image"></i> <span data-lang="imageSettings">图片设置</span></h3>
@@ -193,7 +216,7 @@
             <div class="download-section">
                 <button id="download" class="download-btn">
                     <i class="fas fa-download"></i>
-                    <span data-lang="downloadButton">下载背景图片</span>
+                    <span data-lang="downloadButton">下载到本地</span>
                 </button>
             </div>
         </aside>
