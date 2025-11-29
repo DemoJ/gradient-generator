@@ -1,234 +1,207 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="免费在线渐变背景生成器，轻松创建和下载漂亮的渐变背景图片。支持自定义颜色、角度和尺寸，可导出多种格式。">
-    <meta name="keywords" content="渐变背景,背景生成器,在线工具,CSS渐变,设计工具,图片生成器">
-    <meta name="author" content="DIYUN">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="渐变背景生成器 - 在线创建精美渐变背景">
-    <meta property="og:description" content="免费在线渐变背景生成器，轻松创建和下载漂亮的渐变背景图片。支持自定义颜色、角度和尺寸，可导出多种格式。">
-    <meta property="og:type" content="website">
-    <title>渐变背景生成器 - 在线创建精美渐变背景</title>
-    <link rel="icon" href="https://files.diyun.site/blog/2024/07/7fae6d19f5561324c078bebcfe19cbff.webp">
+    <title>Gradient Pro | 极致渐变工坊</title>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- 新的CSS样式 -->
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- 多语言脚本 - 提前加载 -->
-    <script src="i18n.js"></script>
-    
-    <!-- 百度统计 -->
-    <script>
-        // 加载配置文件并初始化百度统计
-        fetch('config.json')
-            .then(response => response.json())
-            .then(config => {
-                if (config.baiduAnalytics) {
-                    var _hmt = _hmt || [];
-                    (function() {
-                        var hm = document.createElement("script");
-                        hm.src = "https://hm.baidu.com/hm.js?" + config.baiduAnalytics;
-                        var s = document.getElementsByTagName("script")[0]; 
-                        s.parentNode.insertBefore(hm, s);
-                    })();
-                }
-            })
-            .catch(error => console.error('加载配置文件失败:', error));
-    </script>
 </head>
 <body>
-    <!-- 背景动画层 -->
-    <div class="background-animation">
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
-            <div class="shape shape-5"></div>
-        </div>
+    
+    <div class="ambient-bg" id="ambientBg">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
     </div>
     
-    <!-- 顶部导航栏 -->
-    <nav class="navbar">
-        <div class="nav-brand">
-            <i class="fas fa-palette"></i>
-            <span data-lang="pageTitle">渐变生成器</span>
-        </div>
-        <div class="nav-actions">
-            <div class="language-switcher">
-                <button class="language-btn active" onclick="setLanguage('zh-CN')">
-                    <i class="fas fa-globe"></i>
-                    中文
-                </button>
-                <button class="language-btn" onclick="setLanguage('en')">
-                    <i class="fas fa-globe"></i>
-                    EN
-                </button>
-            </div>
-            <a href="https://github.com/DemoJ/gradient-generator" target="_blank" class="github-btn">
-                <i class="fab fa-github"></i>
-                <span>GitHub</span>
-            </a>
-        </div>
-    </nav>
+    <div class="noise-overlay"></div>
 
-    <!-- 主容器 -->
-    <main class="main-container">
-        <!-- 左侧控制面板 -->
-        <aside class="control-panel">
-            <div class="control-content">
-                <!-- 预设渐变 -->
-                <section class="control-section">
-                    <h3><i class="fas fa-star"></i> <span data-lang="presetGradients">推荐渐变</span></h3>
-                    <div class="preset-grid">
-                        <button class="preset-item" data-colors='["#667eea", "#764ba2"]' title="梦幻紫">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
-                            <span class="preset-name">梦幻紫</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#f093fb", "#f5576c"]' title="粉色梦境">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
-                            <span class="preset-name">粉色梦境</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#4facfe", "#00f2fe"]' title="天空蓝">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
-                            <span class="preset-name">天空蓝</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#43e97b", "#38f9d7"]' title="薄荷绿">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></div>
-                            <span class="preset-name">薄荷绿</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#fa709a", "#fee140"]' title="日落黄">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
-                            <span class="preset-name">日落黄</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#a8edea", "#fed6e3"]' title="柔和粉">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"></div>
-                            <span class="preset-name">柔和粉</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#ff9a9e", "#fecfef"]' title="樱花粉">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"></div>
-                            <span class="preset-name">樱花粉</span>
-                        </button>
-                        <button class="preset-item" data-colors='["#a18cd1", "#fbc2eb"]' title="淡紫色">
-                            <div class="preset-bg" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)"></div>
-                            <span class="preset-name">淡紫色</span>
-                        </button>
+    <div class="app-layout">
+        <!-- 左侧：创作者控制台 -->
+        <aside class="sidebar glass-panel">
+            <header class="brand-header">
+                <div class="logo">
+                    <div class="logo-mark"><i class="fas fa-swatchbook"></i></div>
+                    <span class="logo-text">Gradient Pro</span>
+                </div>
+                <div class="header-actions">
+                    <div class="lang-pill">
+                        <button data-lang-code="zh-CN" class="active">中文</button>
+                        <span class="divider">/</span>
+                        <button data-lang-code="en">EN</button>
                     </div>
-                </section>
+                </div>
+            </header>
 
-                <!-- 自定义颜色 -->
-                <section class="control-section">
-                    <h3><i class="fas fa-palette"></i> <span data-lang="customColors">自定义颜色</span></h3>
-                    <div class="color-picker-group">
-                        <div class="color-picker">
-                            <div class="color-input-wrapper">
-                                <input type="color" id="color1" value="#667eea">
-                                <span class="color-value">#667eea</span>
-                            </div>
+            <div class="scroll-container">
+                <!-- 1. 色彩混合引擎 -->
+                <div class="control-group">
+                    <div class="group-title">
+                        <i class="fas fa-fill-drip"></i>
+                        <span data-lang="customColors">色彩配置</span>
+                    </div>
+                    
+                    <div class="color-mixer">
+                        <div class="color-node">
+                            <input type="color" id="color1" value="#fccb90">
+                            <div class="color-surface" id="surface1"></div>
+                            <span class="color-label">Start</span>
                         </div>
-                        <div class="color-picker">
-                            <div class="color-input-wrapper">
-                                <input type="color" id="color2" value="#764ba2">
-                                <span class="color-value">#764ba2</span>
-                            </div>
+                        
+                        <button class="btn-swap" id="swapColors" title="交换色彩流向">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        
+                        <div class="color-node">
+                            <input type="color" id="color2" value="#d57eeb">
+                            <div class="color-surface" id="surface2"></div>
+                            <span class="color-label">End</span>
                         </div>
                     </div>
-                </section>
+                    
+                    <button class="btn-random" id="randomBtn">
+                        <i class="fas fa-magic"></i>
+                        <span data-lang="randomGradient">随机灵感</span>
+                        <span class="shortcut-hint">Space</span>
+                    </button>
+                </div>
 
-                <!-- 渐变设置 -->
-                <section class="control-section">
-                    <h3><i class="fas fa-cog"></i> <span data-lang="gradientSettings">渐变设置</span></h3>
-                    <div class="setting-item">
-                        <div class="slider-wrapper">
-                            <input type="range" id="angle" min="0" max="360" value="135" class="modern-slider">
-                            <span class="slider-value" id="angleValue">135°</span>
+                <!-- 2. 角度控制 -->
+                <div class="control-group">
+                    <div class="group-header-row">
+                        <div class="group-title">
+                            <i class="far fa-compass"></i>
+                            <span data-lang="gradientSettings">光影角度</span>
+                        </div>
+                        <span class="value-badge"><span id="angleText">135</span>°</span>
+                    </div>
+                    
+                    <div class="angle-interface">
+                        <div class="angle-ring" id="angleDial">
+                            <div class="angle-track"></div>
+                            <div class="angle-knob" id="anglePointer"></div>
+                            <div class="angle-center-dot"></div>
+                        </div>
+                        <div class="angle-presets">
+                            <button data-deg="0">⬆</button>
+                            <button data-deg="90">➡</button>
+                            <button data-deg="180">⬇</button>
+                            <button data-deg="45">↗</button>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- 图片设置 -->
-                <section class="control-section">
-                    <h3><i class="fas fa-image"></i> <span data-lang="imageSettings">图片设置</span></h3>
-                    <div class="setting-row">
-                        <div class="setting-item">
-                            <input type="number" id="width" value="1920" min="100" max="8000" class="number-input">
+                <!-- 3. 精选预设 -->
+                <div class="control-group">
+                    <div class="group-title">
+                        <i class="fas fa-th-large"></i>
+                        <span data-lang="presetGradients">大师预设</span>
+                    </div>
+                    <div class="preset-scroll-view" id="presetGrid">
+                        <!-- JS 注入 -->
+                    </div>
+                </div>
+
+                <!-- 4. 叠加与纹理 -->
+                <div class="control-group">
+                    <div class="group-title">
+                        <i class="fas fa-layer-group"></i>
+                        <span data-lang="uploadImage">材质与叠加</span>
+                    </div>
+                    
+                    <div class="upload-widget" id="dropZone">
+                        <input type="file" id="imageUpload" accept="image/*" hidden>
+                        <div class="upload-placeholder">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span data-lang="chooseFile">拖拽 Logo / 图片</span>
                         </div>
-                        <div class="setting-item">
-                            <input type="number" id="height" value="1080" min="100" max="8000" class="number-input">
+                        <div class="upload-preview" id="miniImgPreview">
+                            <button class="btn-remove-img" id="removeImgBtn"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
-                </section>
 
-                <!-- 格式选择 -->
-                <section class="control-section">
-                    <h3><i class="fas fa-file"></i> <span data-lang="format">格式</span></h3>
-                    <div class="format-selector">
-                        <label class="format-option">
-                            <input type="radio" name="format" value="png" checked>
-                            <span>PNG</span>
-                        </label>
-                        <label class="format-option">
-                            <input type="radio" name="format" value="jpeg">
-                            <span>JPEG</span>
-                        </label>
-                        <label class="format-option">
-                            <input type="radio" name="format" value="webp">
-                            <span>WebP</span>
-                        </label>
+                    <div class="slider-control" id="imgControls" style="display: none;">
+                        <span class="slider-label" data-lang="imageScale">缩放比例</span>
+                        <input type="range" id="imageScale" min="10" max="90" value="50">
                     </div>
-                </section>
-            </div>
+                </div>
+                
+                <!-- 底部留白，确保内容能滚上来，但不要在这里放 footer -->
+                <div style="height: 20px;"></div>
+            </div> <!-- 滚动容器结束 -->
 
-            <!-- 下载按钮 -->
-            <div class="download-section">
-                <button id="download" class="download-btn">
-                    <i class="fas fa-download"></i>
-                    <span data-lang="downloadButton">下载背景图片</span>
-                </button>
-            </div>
-        </aside>
+            <!-- 底部：导出操作 (移到这里，滚动容器之外) -->
+            <div class="sidebar-footer">
+                <div class="size-inputs">
+                    <div class="input-float">
+                        <input type="number" id="width" value="1920">
+                        <label data-lang="width">宽度</label>
+                    </div>
+                    <div class="x-divider">×</div>
+                    <div class="input-float">
+                        <input type="number" id="height" value="1080">
+                        <label data-lang="height">高度</label>
+                    </div>
+                </div>
 
-        <!-- 右侧预览区域 -->
-        <section class="preview-section">
-            <div class="preview-header">
-                <h2><i class="fas fa-eye"></i> <span data-lang="preview">实时预览</span></h2>
-                <div class="preview-info">
-                    <span class="css-code" id="cssCode">background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</span>
-                    <button class="copy-btn" onclick="copyCSSCode()">
-                        <i class="fas fa-copy"></i>
-                        <span data-lang="copyCss">复制CSS</span>
+                <div class="export-actions">
+                    <select id="formatSelect" class="format-select">
+                        <option value="png">PNG (HQ)</option>
+                        <option value="jpeg">JPG</option>
+                        <option value="webp">WebP</option>
+                    </select>
+                    <button class="btn-primary" id="downloadBtn">
+                        <span class="btn-text" data-lang="downloadButton">下载壁纸</span>
+                        <span class="btn-icon"><i class="fas fa-arrow-down"></i></span>
+                        <div class="btn-loader"></div>
                     </button>
                 </div>
             </div>
-            <div class="preview-container">
-                <div id="preview" class="preview-canvas"></div>
-                <div class="preview-overlay">
-                    <div class="preview-controls">
-                        <button class="preview-btn" onclick="randomGradient()">
-                            <i class="fas fa-random"></i>
-                            <span data-lang="randomGradient">随机渐变</span>
-                        </button>
-                        <button class="preview-btn" onclick="toggleFullscreen()">
-                            <i class="fas fa-expand"></i>
-                            <span data-lang="fullscreenPreview">全屏预览</span>
-                        </button>
+        </aside>
+
+        <!-- 右侧：工作区 -->
+        <main class="workspace">
+            <div class="toolbar-container">
+                <div class="css-display" id="copyBtn">
+                    <span class="label">CSS</span>
+                    <div class="code-content">
+                        <span class="css-value">linear-gradient(...)</span>
+                    </div>
+                    <button class="action-copy" data-lang="copyCss">复制</button>
+                </div>
+                
+                <div class="toolbar-actions">
+                    <button class="tool-btn" id="toggleGridBtn" title="网格背景">
+                        <i class="fas fa-border-none"></i>
+                    </button>
+                    <button class="tool-btn" id="fullscreenBtn" title="全屏预览">
+                        <i class="fas fa-expand-alt"></i>
+                    </button>
+                    <a href="https://github.com/DemoJ/gradient-generator" target="_blank" class="tool-btn github">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="canvas-stage">
+                <div class="artboard-container">
+                    <div class="artboard-shadow"></div>
+                    <div class="artboard" id="mainPreview">
+                        <!-- 动态内容 -->
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
-    <!-- 脚本文件 -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="i18n.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

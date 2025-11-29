@@ -1,178 +1,135 @@
-// 语言配置
 const translations = {
     'zh-CN': {
-        title: '渐变背景生成器 - 在线创建精美渐变背景',
-        description: '免费在线渐变背景生成器，轻松创建和下载漂亮的渐变背景图片。支持自定义颜色、角度和尺寸，可导出多种格式。',
-        keywords: '渐变背景,背景生成器,在线工具,CSS渐变,设计工具,图片生成器',
-        pageTitle: '渐变背景生成器',
-        presetGradients: '推荐渐变',
-        customColors: '自定义颜色',
-        gradientSettings: '渐变设置',
-        imageSettings: '图片设置',
-        format: '格式',
-        preview: '实时预览',
-        copyCss: '复制CSS',
-        randomGradient: '随机渐变',
-        fullscreenPreview: '全屏预览',
-        neonPurple: '霓虹紫',
-        coralPink: '珊瑚粉',
-        auroraPurple: '极光紫',
-        oceanBlue: '海洋蓝',
-        candyGradient: '糖果渐变',
-        tropicalVibes: '热带风情',
-        deepPurple: '深邃紫',
-        warmOrange: '热情橙',
-        customGradient: '自定义渐变：',
-        gradientAngle: '渐变角度：',
-        imageSize: '图片尺寸：',
+        pageTitle: 'Gradient Pro',
+        customColors: '色彩配置',
+        gradientSettings: '角度控制',
+        presetGradients: '大师预设',
+        uploadImage: '叠加素材',
+        imageSettings: '导出设置',
+        chooseFile: '点击或拖拽图片至此',
+        imageScale: '缩放比例',
+        downloadButton: '下载壁纸',
+        copyCss: '复制 CSS',
         width: '宽度',
         height: '高度',
-        imageFormat: '图片格式：',
-        downloadButton: '下载背景图片',
-        languageSelector: '语言：'
+        randomGradient: '随机灵感', // 确保中文也有这个key
+        // 预设名称
+        p_dreamy_purple: '梦幻紫',
+        p_sunset_glow: '日落金',
+        p_ocean_blue: '深海蓝',
+        p_mint_fresh: '薄荷绿',
+        p_sakura_pink: '樱花粉',
+        p_aurora_green: '极光绿',
+        p_neon_city: '霓虹城',
+        p_morning_mist: '晨雾灰',
+        p_lemon_soda: '柠檬苏打',
+        p_starry_night: '星空黑',
+        p_coral_reef: '珊瑚红',
+        p_sky_mirror: '天空之镜'
     },
     'en': {
-        title: 'Gradient Background Generator - Create Beautiful Gradient Backgrounds Online',
-        description: 'Free online gradient background generator. Create and download beautiful gradient background images. Customize colors, angles, and sizes, export in multiple formats.',
-        keywords: 'gradient background,background generator,online tool,CSS gradient,design tool,image generator',
-        pageTitle: 'Gradient Background Generator',
-        presetGradients: 'Preset Gradients',
-        customColors: 'Custom Colors',
-        gradientSettings: 'Gradient Settings',
-        imageSettings: 'Image Settings',
-        format: 'Format',
-        preview: 'Preview',
+        pageTitle: 'Gradient Pro',
+        customColors: 'Colors',
+        gradientSettings: 'Angle',
+        presetGradients: 'Presets',
+        uploadImage: 'Overlay',
+        imageSettings: 'Export',
+        chooseFile: 'Drop image or click',
+        imageScale: 'Scale',
+        downloadButton: 'Download',
         copyCss: 'Copy CSS',
-        randomGradient: 'Random Gradient',
-        fullscreenPreview: 'Fullscreen Preview',
-        neonPurple: 'Neon Purple',
-        coralPink: 'Coral Pink',
-        auroraPurple: 'Aurora Purple',
-        oceanBlue: 'Ocean Blue',
-        candyGradient: 'Candy Gradient',
-        tropicalVibes: 'Tropical Vibes',
-        deepPurple: 'Deep Purple',
-        warmOrange: 'Warm Orange',
-        customGradient: 'Custom Gradient:',
-        gradientAngle: 'Gradient Angle:',
-        imageSize: 'Image Size:',
         width: 'Width',
         height: 'Height',
-        imageFormat: 'Image Format:',
-        downloadButton: 'Download Background Image',
-        languageSelector: 'Language:'
+        randomGradient: 'Randomize', // 修复：补全英文翻译
+        // Presets
+        p_dreamy_purple: 'Dreamy Purple',
+        p_sunset_glow: 'Sunset Glow',
+        p_ocean_blue: 'Ocean Blue',
+        p_mint_fresh: 'Mint Fresh',
+        p_sakura_pink: 'Sakura Pink',
+        p_aurora_green: 'Aurora Green',
+        p_neon_city: 'Neon City',
+        p_morning_mist: 'Morning Mist',
+        p_lemon_soda: 'Lemon Soda',
+        p_starry_night: 'Starry Night',
+        p_coral_reef: 'Coral Reef',
+        p_sky_mirror: 'Sky Mirror'
     }
 };
 
-// 语言管理类
 class LanguageManager {
     constructor() {
-        this.translations = translations;
-        this.currentLanguage = this.getSavedLanguage() || this.getSystemLanguage();
+        this.lang = localStorage.getItem('lang') || 'zh-CN';
+        this.init();
+    }
+
+    init() {
+        this.applyLanguage(this.lang);
         
-        // 立即设置html标签的lang属性
-        document.documentElement.lang = this.currentLanguage;
-        
-        // 立即更新页面内容和按钮状态
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => {
-                this.updateContent();
-                this.updateButtons();
+        document.querySelectorAll('.lang-pill button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const target = e.target.closest('button');
+                if(!target) return;
+                const code = target.dataset.langCode;
+                this.setLanguage(code);
             });
-        } else {
-            this.updateContent();
-            this.updateButtons();
-        }
-        
-        // 确保在页面完全加载后再次更新
-        window.addEventListener('load', () => {
-            this.updateContent();
-            this.updateButtons();
         });
     }
 
-    // 获取保存的语言设置
-    getSavedLanguage() {
-        return localStorage.getItem('preferredLanguage');
+    setLanguage(code) {
+        this.lang = code;
+        localStorage.setItem('lang', code);
+        this.applyLanguage(code);
+        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: code } }));
     }
 
-    // 获取系统语言
-    getSystemLanguage() {
-        const language = navigator.language || navigator.userLanguage;
-        return language.startsWith('zh') ? 'zh-CN' : 'en';
-    }
+    applyLanguage(code) {
+        const data = translations[code];
+        if (!data) return;
 
-    // 获取翻译文本
-    translate(key) {
-        return this.translations[this.currentLanguage]?.[key] || key;
-    }
+        document.querySelectorAll('.lang-pill button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.langCode === code);
+        });
 
-    // 切换语言
-    setLanguage(lang) {
-        if (this.translations[lang]) {
-            this.currentLanguage = lang;
-            localStorage.setItem('preferredLanguage', lang);
-            document.documentElement.lang = lang; // 设置html标签的lang属性
-            this.updateContent();
-            this.updateButtons();
-        }
-    }
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            const key = el.dataset.lang;
+            if (data[key]) {
+                if (el.tagName === 'BUTTON' && el.querySelector('i') && el.childNodes.length > 1) {
+                    // 仅替换文本节点，保留图标
+                    Array.from(el.childNodes).forEach(node => {
+                        // 查找非空的文本节点进行替换
+                        if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '') {
+                            node.textContent = ' ' + data[key]; // 补一个空格保持间距
+                        }
+                        // 针对 span 包裹的文本 (如 Random 按钮中的 span)
+                        if (node.nodeType === Node.ELEMENT_NODE && node.dataset.lang === key) {
+                             node.textContent = data[key];
+                        }
+                    });
+                    
+                    // 特殊处理结构：如果 data-lang 在子 span 上（如 random 按钮）
+                    const targetSpan = el.querySelector(`[data-lang="${key}"]`);
+                    if(targetSpan) targetSpan.textContent = data[key];
 
-    // 更新语言切换按钮状态
-    updateButtons() {
-        document.querySelectorAll('.language-btn').forEach(btn => {
-            const lang = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
-            btn.classList.toggle('active', lang === this.currentLanguage);
+                } else if (el.tagName === 'LABEL') {
+                    el.textContent = data[key];
+                } else if (el.classList.contains('group-title')) {
+                     const icon = el.querySelector('i');
+                     el.textContent = '';
+                     if(icon) el.appendChild(icon);
+                     el.appendChild(document.createTextNode(' ' + data[key]));
+                } else {
+                    el.textContent = data[key];
+                }
+            }
         });
     }
-
-    // 更新页面内容
-    updateContent() {
-        try {
-            // 更新 meta 标签
-            document.title = this.translate('title');
-            document.querySelector('meta[name="description"]').content = this.translate('description');
-            document.querySelector('meta[name="keywords"]').content = this.translate('keywords');
-            document.querySelector('meta[property="og:title"]').content = this.translate('title');
-            document.querySelector('meta[property="og:description"]').content = this.translate('description');
-
-            // 更新所有带有 data-lang 属性的元素
-            document.querySelectorAll('[data-lang]').forEach(element => {
-                const key = element.getAttribute('data-lang');
-                if (key) {
-                    if (element.tagName === 'INPUT' && element.type === 'placeholder') {
-                        element.placeholder = this.translate(key);
-                    } else {
-                        element.textContent = this.translate(key);
-                    }
-                }
-            });
-
-            // 更新预设渐变按钮的标题
-            const presetButtons = document.querySelectorAll('.preset-btn');
-            presetButtons.forEach(button => {
-                const titleKey = button.getAttribute('data-title-key');
-                if (titleKey) {
-                    button.title = this.translate(titleKey);
-                }
-            });
-
-            // 更新输入框占位符
-            const widthInput = document.querySelector('#width');
-            const heightInput = document.querySelector('#height');
-            if (widthInput) widthInput.placeholder = this.translate('width');
-            if (heightInput) heightInput.placeholder = this.translate('height');
-
-            // 设置html标签的lang属性
-            document.documentElement.lang = this.currentLanguage;
-        } catch (error) {
-            console.error('更新页面内容时发生错误:', error);
-        }
+    
+    get(key) {
+        return translations[this.lang][key] || key;
     }
 }
 
-// 创建全局语言管理器实例
-window.languageManager = new LanguageManager();
-
-// 导出语言切换方法供HTML调用
-window.setLanguage = (lang) => window.languageManager.setLanguage(lang);
+document.addEventListener('DOMContentLoaded', () => {
+    window.langManager = new LanguageManager();
+});
