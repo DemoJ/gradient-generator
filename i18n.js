@@ -8,7 +8,7 @@ const translations = {
         imageSettings: '导出设置',
         chooseFile: '点击或拖拽图片至此',
         imageScale: '缩放比例',
-        downloadButton: '下载壁纸',
+        downloadButton: '下载',
         copyCss: '复制 CSS',
         width: '宽度',
         height: '高度',
