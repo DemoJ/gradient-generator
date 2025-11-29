@@ -3,13 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gradient Pro | 极致渐变工坊</title>
     
+    <!-- SEO Meta Tags (中英文兼顾) -->
+    <title>Gradient Pro | 极致渐变工坊 - Ultimate Gradient Generator</title>
+    <meta name="description" content="免费在线渐变背景生成器(Gradient Generator)，支持自定义色彩混合、可视化角度控制、图片叠加与4K高清壁纸下载。Create beautiful CSS gradients, overlay images, and export high-quality wallpapers online.">
+    <meta name="keywords" content="渐变背景, 渐变生成器, CSS渐变, 设计工具, 壁纸生成, 配色工具, gradient generator, css gradient, background maker, ui tools, wallpaper generator, color blender">
+    <meta name="author" content="Gradient Pro">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Gradient Pro | 极致渐变工坊">
+    <meta property="og:description" content="设计感十足的在线渐变生成器，一键导出 CSS 和高清图片。">
+    <meta property="og:type" content="website">
+    
+    <!-- Icon -->
+    <link rel="icon" href="https://files.diyun.site/blog/2024/07/7fae6d19f5561324c078bebcfe19cbff.webp" type="image/webp">
+    
+    <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+
+    <!-- Baidu Analytics (Dynamic Load) -->
+    <script>
+        fetch('config.json')
+            .then(response => response.json())
+            .then(config => {
+                if (config.baiduAnalytics) {
+                    var _hmt = _hmt || [];
+                    (function() {
+                        var hm = document.createElement("script");
+                        hm.src = "https://hm.baidu.com/hm.js?" + config.baiduAnalytics;
+                        var s = document.getElementsByTagName("script")[0]; 
+                        s.parentNode.insertBefore(hm, s);
+                    })();
+                }
+            })
+            .catch(err => console.log('Analytics config not found or invalid'));
+    </script>
 </head>
 <body>
     
@@ -131,11 +165,11 @@
                     </div>
                 </div>
                 
-                <!-- 底部留白，确保内容能滚上来，但不要在这里放 footer -->
+                <!-- 底部留白，防遮挡 -->
                 <div style="height: 20px;"></div>
-            </div> <!-- 滚动容器结束 -->
+            </div>
 
-            <!-- 底部：导出操作 (移到这里，滚动容器之外) -->
+            <!-- 底部：导出操作 (悬浮于 Sidebar 底部) -->
             <div class="sidebar-footer">
                 <div class="size-inputs">
                     <div class="input-float">
@@ -199,6 +233,7 @@
         </main>
     </div>
 
+    <!-- Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="i18n.js"></script>
