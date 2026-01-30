@@ -160,8 +160,16 @@
                     </div>
 
                     <div class="slider-control" id="imgControls" style="display: none;">
-                        <span class="slider-label" data-lang="imageScale">缩放比例</span>
-                        <input type="range" id="imageScale" min="10" max="90" value="50">
+                        <div class="control-row" style="display: flex; flex-direction: column; gap: 20px; width: 100%;">
+                            <div class="slider-item" style="display: flex; align-items: center; gap: 12px;">
+                                <span class="slider-label" data-lang="imageScale" style="min-width: 60px;">缩放比例</span>
+                                <input type="range" id="imageScale" min="10" max="90" value="50" style="flex: 1;">
+                            </div>
+                            <div class="slider-item" style="display: flex; align-items: center; gap: 12px;">
+                                <span class="slider-label" data-lang="imageRadius" style="min-width: 60px;">圆角大小</span>
+                                <input type="range" id="imageRadius" min="0" max="50" value="3" style="flex: 1;">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 

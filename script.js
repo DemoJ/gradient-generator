@@ -10,6 +10,8 @@ class GradientApp {
             image: null,
             imageSrc: null,
             imageScale: 50,
+            imageRadius: 3,
+            imagePos: { x: 0.5, y: 0.5 },
             width: 1920,
             height: 1080,
             format: 'png',
@@ -51,6 +53,7 @@ class GradientApp {
             dropZone: document.getElementById('dropZone'),
             imgControls: document.getElementById('imgControls'),
             imageScale: document.getElementById('imageScale'),
+            imageRadius: document.getElementById('imageRadius'),
             removeImgBtn: document.getElementById('removeImgBtn'),
             miniImgPreview: document.getElementById('miniImgPreview'),
             width: document.getElementById('width'),
@@ -138,7 +141,55 @@ class GradientApp {
             });
         });
 
-        // Image
+        // Image Dragging
+        const handleImageDrag = (startEvent) => {
+            const img = startEvent.target;
+            if (!img.classList.contains('preview-img')) return;
+            
+            startEvent.preventDefault();
+            startEvent.stopPropagation();
+            
+            const startX = startEvent.touches ? startEvent.touches[0].clientX : startEvent.clientX;
+            const startY = startEvent.touches ? startEvent.touches[0].clientY : startEvent.clientY;
+            
+            const rect = this.dom.mainPreview.getBoundingClientRect();
+            const initialPosX = this.state.imagePos.x;
+            const initialPosY = this.state.imagePos.y;
+
+            const onMove = (moveEvent) => {
+                const clientX = moveEvent.touches ? moveEvent.touches[0].clientX : moveEvent.clientX;
+                const clientY = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY;
+                
+                const deltaX = clientX - startX;
+                const deltaY = clientY - startY;
+                
+                const percentX = deltaX / rect.width;
+                const percentY = deltaY / rect.height;
+                
+                this.state.imagePos.x = initialPosX + percentX;
+                this.state.imagePos.y = initialPosY + percentY;
+                
+                img.style.left = `${this.state.imagePos.x * 100}%`;
+                img.style.top = `${this.state.imagePos.y * 100}%`;
+            };
+
+            const onUp = () => {
+                window.removeEventListener('mousemove', onMove);
+                window.removeEventListener('mouseup', onUp);
+                window.removeEventListener('touchmove', onMove);
+                window.removeEventListener('touchend', onUp);
+            };
+
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            window.addEventListener('touchmove', onMove, {passive: false});
+            window.addEventListener('touchend', onUp);
+        };
+        
+        this.dom.mainPreview.addEventListener('mousedown', handleImageDrag);
+        this.dom.mainPreview.addEventListener('touchstart', handleImageDrag, {passive: false});
+
+        // Image Upload
         dom.imageUpload.addEventListener('change', (e) => this.handleImage(e.target.files[0]));
         dom.dropZone.addEventListener('click', () => { dom.imageUpload.click(); });
         
@@ -163,6 +214,11 @@ class GradientApp {
 
         dom.imageScale.addEventListener('input', (e) => {
             this.state.imageScale = parseInt(e.target.value);
+            this.updateView();
+        });
+
+        dom.imageRadius.addEventListener('input', (e) => {
+            this.state.imageRadius = parseInt(e.target.value);
             this.updateView();
         });
 
@@ -227,6 +283,9 @@ class GradientApp {
             img.src = state.imageSrc;
             img.className = 'preview-img';
             img.style.width = `${state.imageScale}%`;
+            img.style.borderRadius = `${state.imageRadius}%`;
+            img.style.left = `${state.imagePos.x * 100}%`;
+            img.style.top = `${state.imagePos.y * 100}%`;
             dom.mainPreview.appendChild(img);
             
             dom.dropZone.classList.add('has-image');
@@ -322,9 +381,40 @@ class GradientApp {
                 let drawW, drawH;
                 drawW = w * scale;
                 drawH = drawW / imgRatio;
-                const dx = (w - drawW) / 2;
-                const dy = (h - drawH) / 2;
-                ctx.drawImage(img, dx, dy, drawW, drawH);
+                
+                const centerX = state.imagePos.x * w;
+                const centerY = state.imagePos.y * h;
+                
+                const dx = centerX - drawW / 2;
+                const dy = centerY - drawH / 2;
+
+                // Handle Corner Radius
+                if (state.imageRadius > 0) {
+                    ctx.save();
+                    const rX = drawW * (state.imageRadius / 100);
+                    const rY = drawH * (state.imageRadius / 100);
+                    
+                    ctx.beginPath();
+                    // Custom rounded rect implementation to handle non-uniform scaling if necessary,
+                    // but here we use standard ellipse arc logic which matches border-radius % behavior roughly
+                    // Start from top-left
+                    ctx.moveTo(dx + rX, dy);
+                    ctx.lineTo(dx + drawW - rX, dy);
+                    ctx.quadraticCurveTo(dx + drawW, dy, dx + drawW, dy + rY);
+                    ctx.lineTo(dx + drawW, dy + drawH - rY);
+                    ctx.quadraticCurveTo(dx + drawW, dy + drawH, dx + drawW - rX, dy + drawH);
+                    ctx.lineTo(dx + rX, dy + drawH);
+                    ctx.quadraticCurveTo(dx, dy + drawH, dx, dy + drawH - rY);
+                    ctx.lineTo(dx, dy + rY);
+                    ctx.quadraticCurveTo(dx, dy, dx + rX, dy);
+                    ctx.closePath();
+                    
+                    ctx.clip();
+                    ctx.drawImage(img, dx, dy, drawW, drawH);
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(img, dx, dy, drawW, drawH);
+                }
             }
 
             const link = document.createElement('a');

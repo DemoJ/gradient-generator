@@ -462,8 +462,19 @@ html, body {
     display: block;
     max-width: none; 
     object-fit: contain; 
-    pointer-events: none;
+    /* pointer-events: none;  Removed to allow interaction */
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    position: absolute; /* Added for positioning */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+}
+
+.preview-img:active {
+    cursor: grabbing;
 }
 
 /* Toast */
