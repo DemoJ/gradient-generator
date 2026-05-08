@@ -14,6 +14,7 @@ const translations = {
         width: '宽度',
         height: '高度',
         randomGradient: '随机灵感', // 确保中文也有这个key
+        appDescription: '免费的高级渐变背景与壁纸生成工具。支持色彩混合、叠加材质，一键导出 CSS、4K 图片或 SVG 矢量图。',
         // 预设名称
         p_dreamy_purple: '梦幻紫',
         p_sunset_glow: '日落金',
@@ -43,6 +44,7 @@ const translations = {
         width: 'Width',
         height: 'Height',
         randomGradient: 'Randomize', // 修复：补全英文翻译
+        appDescription: 'Free advanced gradient background and wallpaper generator. Supports color blending, material overlay, and one-click export to CSS, 4K images, or SVG vectors.',
         // Presets
         p_dreamy_purple: 'Dreamy Purple',
         p_sunset_glow: 'Sunset Glow',

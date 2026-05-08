@@ -167,6 +167,17 @@ html, body {
 }
 .scroll-container::-webkit-scrollbar { width: 0; }
 
+.intro-section {
+    padding: 0 4px;
+}
+.intro-section p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    font-weight: 500;
+}
+
 /* =========================================
    3. 控件样式
    ========================================= */
