@@ -354,78 +354,141 @@ class GradientApp {
         btn.classList.add('loading');
         
         setTimeout(() => {
-            const canvas = document.createElement('canvas');
-            canvas.width = state.width;
-            canvas.height = state.height;
-            const ctx = canvas.getContext('2d');
-            const w = canvas.width;
-            const h = canvas.height;
-            
-            const angleRad = (state.angle - 180) * (Math.PI / 180); 
-            const segmentLength = Math.abs(w * Math.sin(angleRad)) + Math.abs(h * Math.cos(angleRad));
-            const x1 = w/2 + Math.sin(angleRad) * segmentLength/2;
-            const y1 = h/2 - Math.cos(angleRad) * segmentLength/2;
-            const x2 = w/2 - Math.sin(angleRad) * segmentLength/2;
-            const y2 = h/2 + Math.cos(angleRad) * segmentLength/2;
-
-            const grad = ctx.createLinearGradient(x1, y1, x2, y2);
-            grad.addColorStop(0, state.colors[0]);
-            grad.addColorStop(1, state.colors[1]);
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, w, h);
-
-            if (state.image) {
-                const img = state.image;
-                const scale = state.imageScale / 100;
-                const imgRatio = img.width / img.height;
-                let drawW, drawH;
-                drawW = w * scale;
-                drawH = drawW / imgRatio;
+            if (state.format === 'svg') {
+                this.downloadSVG();
+            } else {
+                const canvas = document.createElement('canvas');
+                canvas.width = state.width;
+                canvas.height = state.height;
+                const ctx = canvas.getContext('2d');
+                const w = canvas.width;
+                const h = canvas.height;
                 
-                const centerX = state.imagePos.x * w;
-                const centerY = state.imagePos.y * h;
-                
-                const dx = centerX - drawW / 2;
-                const dy = centerY - drawH / 2;
+                const angleRad = (state.angle - 180) * (Math.PI / 180); 
+                const segmentLength = Math.abs(w * Math.sin(angleRad)) + Math.abs(h * Math.cos(angleRad));
+                const x1 = w/2 + Math.sin(angleRad) * segmentLength/2;
+                const y1 = h/2 - Math.cos(angleRad) * segmentLength/2;
+                const x2 = w/2 - Math.sin(angleRad) * segmentLength/2;
+                const y2 = h/2 + Math.cos(angleRad) * segmentLength/2;
 
-                // Handle Corner Radius
-                if (state.imageRadius > 0) {
-                    ctx.save();
-                    const rX = drawW * (state.imageRadius / 100);
-                    const rY = drawH * (state.imageRadius / 100);
+                const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+                grad.addColorStop(0, state.colors[0]);
+                grad.addColorStop(1, state.colors[1]);
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
+
+                if (state.image) {
+                    const img = state.image;
+                    const scale = state.imageScale / 100;
+                    const imgRatio = img.width / img.height;
+                    let drawW, drawH;
+                    drawW = w * scale;
+                    drawH = drawW / imgRatio;
                     
-                    ctx.beginPath();
-                    // Custom rounded rect implementation to handle non-uniform scaling if necessary,
-                    // but here we use standard ellipse arc logic which matches border-radius % behavior roughly
-                    // Start from top-left
-                    ctx.moveTo(dx + rX, dy);
-                    ctx.lineTo(dx + drawW - rX, dy);
-                    ctx.quadraticCurveTo(dx + drawW, dy, dx + drawW, dy + rY);
-                    ctx.lineTo(dx + drawW, dy + drawH - rY);
-                    ctx.quadraticCurveTo(dx + drawW, dy + drawH, dx + drawW - rX, dy + drawH);
-                    ctx.lineTo(dx + rX, dy + drawH);
-                    ctx.quadraticCurveTo(dx, dy + drawH, dx, dy + drawH - rY);
-                    ctx.lineTo(dx, dy + rY);
-                    ctx.quadraticCurveTo(dx, dy, dx + rX, dy);
-                    ctx.closePath();
+                    const centerX = state.imagePos.x * w;
+                    const centerY = state.imagePos.y * h;
                     
-                    ctx.clip();
-                    ctx.drawImage(img, dx, dy, drawW, drawH);
-                    ctx.restore();
-                } else {
-                    ctx.drawImage(img, dx, dy, drawW, drawH);
+                    const dx = centerX - drawW / 2;
+                    const dy = centerY - drawH / 2;
+
+                    // Handle Corner Radius
+                    if (state.imageRadius > 0) {
+                        ctx.save();
+                        const rX = drawW * (state.imageRadius / 100);
+                        const rY = drawH * (state.imageRadius / 100);
+                        
+                        ctx.beginPath();
+                        // Custom rounded rect implementation to handle non-uniform scaling if necessary,
+                        // but here we use standard ellipse arc logic which matches border-radius % behavior roughly
+                        // Start from top-left
+                        ctx.moveTo(dx + rX, dy);
+                        ctx.lineTo(dx + drawW - rX, dy);
+                        ctx.quadraticCurveTo(dx + drawW, dy, dx + drawW, dy + rY);
+                        ctx.lineTo(dx + drawW, dy + drawH - rY);
+                        ctx.quadraticCurveTo(dx + drawW, dy + drawH, dx + drawW - rX, dy + drawH);
+                        ctx.lineTo(dx + rX, dy + drawH);
+                        ctx.quadraticCurveTo(dx, dy + drawH, dx, dy + drawH - rY);
+                        ctx.lineTo(dx, dy + rY);
+                        ctx.quadraticCurveTo(dx, dy, dx + rX, dy);
+                        ctx.closePath();
+                        
+                        ctx.clip();
+                        ctx.drawImage(img, dx, dy, drawW, drawH);
+                        ctx.restore();
+                    } else {
+                        ctx.drawImage(img, dx, dy, drawW, drawH);
+                    }
                 }
-            }
 
-            const link = document.createElement('a');
-            link.download = `gradient-pro-${Date.now()}.${state.format}`;
-            link.href = canvas.toDataURL(`image/${state.format}`, 0.95);
-            link.click();
+                const link = document.createElement('a');
+                link.download = `gradient-pro-${Date.now()}.${state.format}`;
+                link.href = canvas.toDataURL(`image/${state.format}`, 0.95);
+                link.click();
+            }
 
             btn.querySelector('.btn-text').style.opacity = '1';
             btn.querySelector('.btn-icon').style.opacity = '1';
             btn.classList.remove('loading');
         }, 100);
+    }
+
+    downloadSVG() {
+        const { state } = this;
+        const w = state.width;
+        const h = state.height;
+        
+        const angleRad = (state.angle - 180) * (Math.PI / 180); 
+        const segmentLength = Math.abs(w * Math.sin(angleRad)) + Math.abs(h * Math.cos(angleRad));
+        const x1 = w/2 + Math.sin(angleRad) * segmentLength/2;
+        const y1 = h/2 - Math.cos(angleRad) * segmentLength/2;
+        const x2 = w/2 - Math.sin(angleRad) * segmentLength/2;
+        const y2 = h/2 + Math.cos(angleRad) * segmentLength/2;
+
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+    <defs>
+        <linearGradient id="grad" gradientUnits="userSpaceOnUse" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">
+            <stop offset="0%" stop-color="${state.colors[0]}" />
+            <stop offset="100%" stop-color="${state.colors[1]}" />
+        </linearGradient>`;
+
+        let imageGroup = '';
+        if (state.image) {
+            const img = state.image;
+            const scale = state.imageScale / 100;
+            const imgRatio = img.width / img.height;
+            const drawW = w * scale;
+            const drawH = drawW / imgRatio;
+            const centerX = state.imagePos.x * w;
+            const centerY = state.imagePos.y * h;
+            const dx = centerX - drawW / 2;
+            const dy = centerY - drawH / 2;
+
+            if (state.imageRadius > 0) {
+                const rX = drawW * (state.imageRadius / 100);
+                const rY = drawH * (state.imageRadius / 100);
+                svgContent += `
+        <clipPath id="clip">
+            <rect x="${dx}" y="${dy}" width="${drawW}" height="${drawH}" rx="${rX}" ry="${rY}" />
+        </clipPath>`;
+                imageGroup = `<image href="${state.imageSrc}" x="${dx}" y="${dy}" width="${drawW}" height="${drawH}" clip-path="url(#clip)" preserveAspectRatio="none" />`;
+            } else {
+                imageGroup = `<image href="${state.imageSrc}" x="${dx}" y="${dy}" width="${drawW}" height="${drawH}" preserveAspectRatio="none" />`;
+            }
+        }
+
+        svgContent += `
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#grad)" />
+    ${imageGroup}
+</svg>`;
+
+        const blob = new Blob([svgContent], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = `gradient-pro-${Date.now()}.svg`;
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     renderPresets() {
